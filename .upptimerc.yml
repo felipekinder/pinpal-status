@@ -1,36 +1,82 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# =============================================================================
+# PinPal Status Page - Powered by Upptime
+# https://github.com/felipekinder/pinpal-status
+# =============================================================================
+
+owner: felipekinder
+repo: pinpal-status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Test Broken Site
-    url: https://thissitedoesnotexist.koj.co
-  - name: IPv6 test
-    url: forwardemail.net
-    port: 80
+  # ── Web App (Frontend - Firebase Hosting) ──
+  - name: PinPal Web App
+    url: https://thepinpal.com
+    icon: https://thepinpal.com/favicon.ico
+    expectedStatusCodes:
+      - 200
+      - 301
+      - 302
+
+  # ── API Backend (Cloud Run) ──
+  - name: PinPal API
+    url: https://api.thepinpal.com/health
+    expectedStatusCodes:
+      - 200
+
+  # ── API - Auth Endpoint ──
+  - name: Authentication Service
+    url: https://api.thepinpal.com/api/auth/status
+    expectedStatusCodes:
+      - 200
+      - 401
+
+  # ── WebSocket (TCP check) ──
+  - name: WebSocket Service
+    url: api.thepinpal.com
+    port: 443
     check: "tcp-ping"
-    ipv6: true
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  # Para usar domínio customizado (status.thepinpal.com), descomente:
+  # cname: status.thepinpal.com
+  baseUrl: /pinpal-status
+  logoUrl: https://thepinpal.com/favicon.ico
+  name: PinPal Status
+  theme: light
+  introTitle: "**PinPal** Status Page"
+  introMessage: This page shows real-time availability and uptime data for PinPal services. Powered by [Upptime](https://github.com/upptime/upptime).
   navbar:
     - title: Status
       href: /
+    - title: PinPal
+      href: https://thepinpal.com
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
 
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+# ── Notifications (optional - configure later) ──
+# notifications:
+#   - type: slack
+#     url: $SLACK_WEBHOOK_URL
+#   - type: email
+#     to: team@thepinpal.com
+
+# ── Uptime schedule ──
+workflowSchedule:
+  graphs: "0 0 * * *"       # Daily graph updates
+  responseTime: "0 23 * * *" # Daily response time
+  staticSite: "0 1 * * *"   # Daily static site rebuild
+  summary: "0 0 * * *"      # Daily summary
+  updateTemplate: "0 0 * * *" # Daily template update
+  uptime: "*/5 * * * *"     # Check every 5 minutes
+
+# ── Issue creation settings ──
+assignees:
+  - felipekinder
+
+i18n:
+  activeIncidents: Active Incidents
+  allOperational: All systems operational
+  incidentReport: Incident Report
+  activeMaintenances: Active Maintenances
+  scheduledMaintenances: Scheduled Maintenances
+  overallUptime: Overall Uptime
+  liveStatus: Live Status
